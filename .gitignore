@@ -1,0 +1,60 @@
+# Segredos
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Dados gerados pelos apps (podem conter documentos reais)
+.cache/
+logs/
+output/
+uploads/
+**/agente_analise_contratos_assets/uploads/
+**/agente_analise_contratos_ingestao_documentos/
+*.db
+*.sqlite
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+
+# Project-specific
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.pytest_cache/
+.coverage
+coverage.xml
+coverage-reports/
+htmlcov/
+.venv-uv/
+.venv-ci/
+run-local.bat
+run-local.ps1
+xunit-reports/
+.venv-py311/
+poetry.lock
+dist/
+build/
+*.egg-info/

@@ -1,0 +1,66 @@
+[project]
+name = "api-automacao-analise-healthchecktt"
+version = "0.1.0"
+description = "Agente de Análise de Healthcheck"
+# A esteira provisiona Python 3.11.
+requires-python = ">=3.11,<3.14"
+
+dependencies = [
+    # Framework principal
+    "fastapi==0.141.0",
+    "uvicorn==0.53.0",
+
+    # Uploads e multipart. Exigido pelo FastAPI para ler UploadFile nos
+    # endpoints de analise: sem ele a aplicacao nao sobe, o FastAPI levanta
+    # RuntimeError ao registrar as rotas que recebem multipart/form-data.
+    "python-multipart==0.0.20",
+
+    # Planilhas. pandas 3.0 exige openpyxl >= 3.1.5 para ler/gravar .xlsx;
+    # com 3.1.0 a leitura do formulario falha com ImportError em runtime.
+    "pandas==3.0.0",
+    "openpyxl==3.1.5",
+
+    # HTTP requests e APIs
+    "requests==2.34.0",
+
+    # Testes
+    "pytest==8.3.3",
+    "coverage==7.6.1",
+    # starlette 1.7 (trazido por fastapi 0.141) removeu o suporte a httpx no
+    # TestClient e passou a exigir httpx2. Sem ele, todo teste que importa
+    # fastapi.testclient falha na coleta com RuntimeError.
+    "httpx2==2.13.1",
+]
+
+[tool.poetry]
+# O nome do projeto nao corresponde a nenhum diretorio: o codigo vive em src/.
+# Sem declarar o pacote explicitamente, o Poetry falha com
+# "No file/folder found for package api-automacao-analise-healthchecktt".
+# Usar package-mode = false resolveria o install, mas quebra o `poetry build`
+# da esteira com "Building a package is not possible in non-package mode".
+packages = [{ include = "src" }]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.masonry.api"
+
+# ─── pytest ───────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+# ─── coverage ─────────────────────────────────────────────────────────────────
+# A esteira invoca o coverage sem --source, o que faz os proprios arquivos de
+# teste entrarem na medicao e diluem o percentual (o denominador sai de ~403
+# para ~1184 statements). Fixar o source aqui garante que apenas o codigo de
+# producao seja medido, independente de como o comando e chamado.
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
